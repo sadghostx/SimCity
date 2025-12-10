@@ -115,51 +115,6 @@ export default function App() {
     const userId = user?.uid;
     const userRef = userId ? doc(db, 'users', userId) : null;
 
-    function App() {
-        const [user, setUser] = useState(null);
-        const [loading, setLoading] = useState(true); // 👈 1. New loading state, initialized to true
-        const [productionData, setProductionData] = useState({});
-    
-        // 2. Fetch user data and set loading state
-        useEffect(() => {
-            const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-                setUser(currentUser);
-                setLoading(false); // 👈 Set loading to false ONLY after auth state is determined
-                if (currentUser) {
-                    fetchUserData(currentUser.uid);
-                }
-            });
-            return () => unsubscribe();
-        }, []);
-    
-        // ... (rest of your fetchUserData, saveData, handleLogout functions)
-    
-        // 3. Conditional Render based on loading state
-        if (loading) {
-            return <div className="loading-screen">Loading application...</div>;
-        }
-        
-        // 4. Conditional Render based on authentication state
-        return (
-            <div className="App">
-                {user ? (
-                    <>
-                        <button onClick={handleLogout}>Log Out</button>
-                        <TabbedProductionPlanner 
-                            productionData={productionData}
-                            onSave={saveData}
-                            itemDefinitions={PRODUCTION_ITEM_DEFINITIONS}
-                        />
-                    </>
-                ) : (
-                    <Login />
-                )}
-            </div>
-        );
-    }
-    
-
-
     // 1. FIRESTORE DATA SAVING (Triggered by any update function)
     const saveTrackerData = useCallback(async (updatedData) => {
         if (userRef) {
@@ -238,6 +193,12 @@ export default function App() {
     if (!user) {
         return <Login setUser={setUser} />;
     }
+
+    // 5. CRITICAL DATA CHECK (Prevents TypeError crash if data is unexpectedly null during render)
+    if (!trackerData || !trackerData.inventoryItems || !trackerData.utilityItems) {
+        return <div className="loading-screen">Loading user data...</div>;
+    }
+
 
     // --- RENDER MAIN APP ---
     return (

@@ -5,21 +5,25 @@ import React, { useMemo } from 'react';
 // ProductionPlanner receives all aggregated needs (called totalNeeds in App.jsx)
 export default function ProductionPlanner({ totalNeeds, utilityItems, onUtilityUpdate }) {
     
-    // 1. Combine all tracker needs into a single map of { item: total_needed }
-    const aggregatedNeedsMap = useMemo(() => {
-        const needsMap = {};
-        
-        // totalNeeds is an object like: { cargoShip: {nail: 3}, war: {cheese: 2}, ... }
-        Object.values(totalNeeds).forEach(trackerNeeds => {
-            for (const item in trackerNeeds) {
-                // Ensure item names are lowercase for consistent aggregation
-                const lowerItem = item.toLowerCase();
-                needsMap[lowerItem] = (needsMap[lowerItem] || 0) + trackerNeeds[item];
-            }
-        });
-        return needsMap;
-    }, [totalNeeds]);
+  // 1. Combine all tracker needs into a single map of { item: total_needed }
+  const aggregatedNeedsMap = useMemo(() => {
+    const needsMap = {};
+    
+    // ** ADDED CHECK HERE **
+    if (!totalNeeds) { 
+        return needsMap; // Return empty map if totalNeeds is null/undefined
+    }
 
+    // totalNeeds is an object like: { cargoShip: {nail: 3}, war: {cheese: 2}, ... }
+    Object.values(totalNeeds).forEach(trackerNeeds => { 
+        for (const item in trackerNeeds) {
+            // Ensure item names are lowercase for consistent aggregation
+            const lowerItem = item.toLowerCase();
+            needsMap[lowerItem] = (needsMap[lowerItem] || 0) + trackerNeeds[item];
+        }
+    });
+    return needsMap;
+}, [totalNeeds]); // End of useMemo
     // 2. Calculate the final production plan and remaining shortfall for display
     const productionPlan = useMemo(() => {
         const plan = [];
