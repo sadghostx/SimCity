@@ -1,0 +1,567 @@
+/* src/App.css */
+
+:root {
+  --simcity-green: #4CAF50;
+  --simcity-dark-green: #388E3C;
+  --simcity-blue: #2196F3;
+  --simcity-yellow: #FFC107;
+  --text-dark: #333;
+  --text-light: #fff;
+  --bg-light: #f4f4f4;
+  --card-bg: #ffffff;
+  --border-color: #ddd;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: var(--bg-light);
+  color: var(--text-dark);
+}
+
+.app-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* --- Header & Navigation --- */
+.simcity-header {
+  text-align: center;
+  margin-bottom: 20px;
+  background-color: var(--simcity-green);
+  color: var(--text-light);
+  padding: 10px 0;
+  border-radius: 8px;
+}
+
+.simcity-header h1 {
+  margin: 0;
+}
+
+.tab-navigation {
+  display: flex;
+  margin-bottom: 20px;
+  border-bottom: 2px solid var(--border-color);
+}
+
+.tab-button {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px 4px 0 0;
+  background-color: #e0e0e0;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  margin-right: 4px;
+  transition: background-color 0.2s;
+}
+
+.tab-button:hover:not(.active) {
+  background-color: #ccc;
+}
+
+.tab-button.active {
+  background-color: var(--simcity-green);
+  color: var(--text-light);
+  border-bottom: 2px solid var(--simcity-green);
+}
+
+.tab-content {
+  padding: 20px 0;
+}
+
+/* --- Utility Item Styling (General) --- */
+.utility-card {
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background-color: var(--card-bg);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 0;
+  /* REDUCED TILE BOTTOM MARGIN */
+  margin-bottom: 5px;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.utility-card h3 {
+  background-color: var(--simcity-dark-green);
+  color: var(--text-light);
+  /* REDUCED HEADER PADDING */
+  padding: 8px 10px;
+  margin: 0;
+  font-size: 1em;
+}
+
+.utility-content {
+    /* REMOVED ALL PADDING TO COMPRESS ROWS HORIZONTALLY */
+    padding: 0; 
+}
+
+/* --- Special Needs Grid Layout --- */
+.special-needs-container {
+    width: 100%; 
+}
+
+.trackers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+    gap: 20px; 
+    padding: 10px 0;
+}
+
+/* --- Tracker Rows (General) --- */
+
+/* Defines the 5 columns for Cargo/War/Airport */
+.tracker-row {
+    display: grid;
+    /* Column widths: Item (100px), Own/Need/Left (35px each), Checkbox (1fr) */
+    grid-template-columns: 100px 35px 35px 35px 1fr; 
+    gap: 2px; 
+    align-items: center;
+    padding: 1px 0;
+    border-bottom: 1px dotted #eee;
+}
+
+.tracker-row:last-child {
+  border-bottom: none;
+}
+
+.tracker-row.completed {
+  background-color: #e8f5e9;
+  color: #757575;
+}
+
+/* Building Upgrade specific tracker row (4 columns: Item | Own | Need | Left) */
+.tracker-row.upgrade-row {
+  display: grid;
+  /* 4 columns: Item (100px), Own/Need/Left (35px each) */
+  grid-template-columns: 100px 35px 35px 35px; 
+  gap: 2px;
+}
+
+/* Inventory specific 3-column row (Item | Have | Needed) */
+.tracker-row.inventory-row {
+    display: grid;
+    /* COMPACT COLUMNS: 1fr 50px 50px */
+    grid-template-columns: 1fr 50px 50px; 
+    gap: 2px; 
+    align-items: center;
+    padding: 1px 0; /* Minimal vertical padding */
+    border-bottom: 1px dotted #eee;
+    font-size: 0.9em;
+}
+
+/* Utility Item specific 2-column row (Item | Have) */
+.tracker-row.utility-item-row {
+    display: grid;
+    /* COMPACT COLUMNS: 1fr 50px (No third column) */
+    grid-template-columns: 1fr 50px; 
+    gap: 2px; 
+    align-items: center;
+    padding: 1px 0;
+    border-bottom: 1px dotted #eee;
+    font-size: 0.9em;
+}
+
+
+/* --- Column Header Bar (General) --- */
+.tracker-header-bar {
+    display: grid;
+    /* Must match the 5-column template of .tracker-row exactly */
+    grid-template-columns: 100px 35px 35px 35px 1fr;
+    gap: 2px;
+    background-color: #e0e0e0;
+    color: var(--text-dark);
+    font-weight: bold;
+    align-items: center;
+    padding: 2px 5px; 
+    border-bottom: 1px solid #ccc;
+    font-size: 0.8em;
+}
+
+.tracker-header-bar.upgrade-header-bar {
+  grid-template-columns: 100px 35px 35px 35px;
+  gap: 2px;
+}
+
+/* Inventory Header Bar (Compact) */
+.tracker-header-bar.inventory-header-bar {
+  /* MATCHING 50PX COLUMNS */
+  grid-template-columns: 1fr 50px 50px;
+  gap: 2px; 
+  padding: 2px 5px; 
+  font-size: 0.75em; 
+}
+
+/* Utility Header Bar (Compact) - 2 Columns */
+.tracker-header-bar.utility-header-bar {
+  /* MATCHING 50PX COLUMN - Removed third column */
+  grid-template-columns: 1fr 50px;
+  gap: 2px; 
+  padding: 2px 5px; 
+  font-size: 0.75em; 
+}
+
+.header-item, .header-needed, .header-have, .header-left, .header-points, .header-target {
+  text-align: center; 
+}
+
+.header-item {
+    text-align: left;
+    /* REMOVED PADDING FOR COMPACTNESS */
+    padding-left: 0;
+}
+
+.header-action {
+    justify-self: center;
+    padding-right: 0px; 
+}
+
+
+/* --- Input Styling (Editable Fields) --- */
+
+.item-name-input, .item-name-display {
+    text-align: left;
+    /* REMOVED PADDING FOR COMPACTNESS */
+    padding-left: 0;
+    box-sizing: border-box;
+    font-size: 0.9em;
+}
+
+.item-name-input {
+    width: 100%; 
+    padding: 1px; 
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.quantity-input {
+    width: 100%; 
+    padding: 1px; 
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    justify-self: center;
+    box-sizing: border-box;
+    font-size: 0.8em;
+    text-align: center; 
+}
+
+/* Inventory Input (Minimal Padding and Fixed Height) */
+.inventory-input {
+    width: 100%; 
+    padding: 0; /* NO PADDING */
+    height: 18px; /* FIXED HEIGHT FOR COMPACTNESS */
+    font-size: 0.8em; 
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* --- Read-Only Columns ("Own", "Left", "Needed") --- */
+.own-quantity,
+.left-quantity,
+.needed-quantity {
+    text-align: center;
+    font-weight: bold;
+    justify-self: center; 
+}
+
+.needed-quantity.shortfall,
+.left-quantity.shortfall {
+    color: #d32f2f;
+}
+
+.needed-quantity.ok,
+.left-quantity.ok {
+    color: var(--simcity-dark-green);
+}
+
+/* --- Checkbox Styling --- */
+.complete-checkbox {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    justify-self: center; 
+    
+}
+
+/* --- Button Styling --- */
+.complete-button {
+    padding: 3px 6px; 
+    font-size: 0.8em;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.2s;
+    background-color: var(--simcity-blue);
+    color: var(--text-light);
+    justify-self: end; 
+}
+
+.complete-button:hover:not(:disabled) {
+    background-color: #1976D2;
+}
+
+.complete-button:disabled {
+    background-color: #bdbdbd;
+    cursor: not-allowed;
+}
+
+.complete-all-button {
+    width: 100%;
+    margin-top: 10px;
+    background-color: var(--simcity-green);
+    color: var(--text-light);
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.complete-all-button:hover:not(:disabled) {
+    background-color: var(--simcity-dark-green);
+}
+
+
+/* --- Production Planner Table --- */
+.production-planner-container h2 {
+    color: var(--simcity-dark-green);
+    border-bottom: 2px solid var(--simcity-green);
+    padding-bottom: 10px;
+    margin-top: 0;
+}
+
+.production-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: var(--card-bg);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.production-table th, .production-table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.production-table th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+.production-table tr:hover {
+  background-color: #f9f9f9;
+}
+
+.production-table .inventory-input {
+    width: 60px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    text-align: center;
+}
+
+.remaining-cell strong {
+  color: #d32f2f;
+  font-weight: bold;
+}
+
+.production-table .ok-row .remaining-cell strong {
+  color: var(--simcity-dark-green);
+}
+
+.production-table .shortfall-row {
+    background-color: #fce4e4;
+}
+
+
+/* --- Utility Items Tab Specific Styles --- */
+.special-resource-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.special-resource-row label {
+    font-weight: bold;
+}
+
+.special-resource-row input {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100px;
+    text-align: right;
+}
+
+/* --- Epic Project Specific Styles --- */
+.points-entry {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+    background-color: #f0f0f0;
+    border-bottom: 1px solid #ddd;
+}
+.points-entry input {
+    width: 80px;
+    text-align: right;
+}
+
+/* ========================================= */
+/* --- CUSTOM TRACKER STYLES (Overrides) --- */
+/* ========================================= */
+
+/* --- Header Color Overrides (General) --- */
+
+.war-tracker h3 { background-color: #D32F2F; }
+.epic-project-tracker h3 { background-color: #FFC107; color: var(--text-dark); }
+.airport-london-tracker h3, .airport-paris-tracker h3, .airport-tokyo-tracker h3 { background-color: #2196F3; color: var(--text-light); }
+.export-hq-tracker h3 { background-color: #800080; color: var(--text-light); }
+.building-upgrade-tracker h3 { background-color: #A1887F; color: var(--text-light); }
+
+/* --- Dynamic Building Upgrade Type Colors --- */
+.building-upgrade-tracker.type-standard h3 { background-color: #A1887F; }
+.building-upgrade-tracker.type-neo-simoleons h3 { background-color: #00BCD4; }
+.building-upgrade-tracker.type-beach h3 { background-color: #FF9800; }
+.building-upgrade-tracker.type-mountain h3 { background-color: #607D8B; }
+.building-upgrade-tracker.type-landmarks h3 { background-color: #FFEB3B; color: var(--text-dark); }
+.building-upgrade-tracker.type-london h3 { background-color: #D32F2F; }
+.building-upgrade-tracker.type-paris h3 { background-color: #2196F3; }
+.building-upgrade-tracker.type-tokyo h3 { background-color: #FF4081; }
+.building-upgrade-tracker.type-omega h3 { background-color: #9C27B0; }
+.building-upgrade-tracker.type-latin-american h3 { background-color: #4CAF50; }
+.building-upgrade-tracker.type-old-town h3 { background-color: #795548; }
+.building-upgrade-tracker.type-doomsday h3 { background-color: #000000; }
+.building-upgrade-tracker.type-medieval h3 { background-color: #3F51B5; }
+.building-upgrade-tracker.type-university h3 { background-color: #FFC107; color: var(--text-dark); }
+.building-upgrade-tracker.type-contest-of-mayors h3 { background-color: #009688; }
+.building-upgrade-tracker.type-art-nouveau-zone h3 { background-color: #80CBC4; color: var(--text-dark); }
+.building-upgrade-tracker.type-kyoto-house h3 { background-color: #757575; }
+.building-upgrade-tracker.type-florentine-zone h3 { background-color: #FBC02D; color: var(--text-dark); }
+
+
+/* --- Inventory Building Tile Colors (Color Coding) --- */
+.inventory-tile.building-factory h3 { background-color: #795548; }
+.inventory-tile.building-hardware-store h3 { background-color: #FFC107; color: var(--text-dark); }
+.inventory-tile.building-farmers-market h3 { background-color: #4CAF50; }
+.inventory-tile.building-building-supplies h3 { background-color: #607D8B; }
+.inventory-tile.building-furniture-store h3 { background-color: #7B1FA2; }
+.inventory-tile.building-fashion-store h3 { background-color: #E91E63; }
+.inventory-tile.building-fast-food-shop h3 { background-color: #FF5722; }
+.inventory-tile.building-lemonade-stand h3 { background-color: #FFEB3B; color: var(--text-dark); }
+.inventory-tile.building-donut-shop h3 { background-color: #9C27B0; }
+.inventory-tile.building-bakery h3 { background-color: #FF9800; }
+
+/* --- Utility Item Tile Colors (Custom Colors) --- */
+.utility-tile.building-currencies-keys h3 { background-color: #FBC02D; color: var(--text-dark); }
+.utility-tile.building-war-items h3 { background-color: #D32F2F; }
+.utility-tile.building-vu-tower h3 { background-color: #D32F2F; /* VU to RED */ }
+.utility-tile.building-land-expansion h3 { background-color: #FF9800; /* LAND to ORANGE */ }
+.utility-tile.building-storage-expansion h3 { background-color: #2196F3; /* STORAGE to BLUE */ }
+.utility-tile.building-region-expansion h3 { background-color: #00BCD4; }
+
+
+/* --- Export HQ/Building Upgrade Layered Bar Fixes --- */
+
+/* Dropdown Size Fixes */
+.region-selector-layer label { font-weight: bold; margin-right: 5px; font-size: 0.9em; }
+.region-selector-layer select { padding: 1px; border: 1px solid #ccc; border-radius: 4px; font-weight: normal; font-size: 0.9em; max-width: 150px; }
+
+
+/* Style the display for current points (Epic Project) */
+.current-points-display {
+  padding: 10px 0; 
+  font-size: 1.1em;
+  font-weight: bold;
+  border-bottom: 1px solid #ddd;
+  background-color: #fffaf0; 
+  margin: 0 -5px; 
+}
+
+/* Style for the layered region selector (Export HQ and Upgrades) */
+.region-selector-layer {
+  padding: 10px 15px; 
+  font-size: 1.1em;
+  font-weight: bold;
+  background-color: #fffaf0; 
+  border-bottom: 1px solid #ddd;
+  margin: 0 -5px; 
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* --- Export HQ/Building Upgrade Final Container Styles --- */
+
+.export-hq-full-tile-wrapper,
+.building-upgrade-tile-wrapper {
+  display: flex;
+  flex-direction: column; 
+  margin-bottom: 20px; 
+}
+
+.export-hq-tracker,
+.building-upgrade-tracker {
+  border-radius: 0 0 8px 8px; 
+}
+
+/* src/App.css (Add to the end) */
+
+/* --- Auth Tab Bar Styles --- */
+.auth-tab-bar {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #ddd;
+}
+
+.auth-tab-button {
+  flex: 1;
+  padding: 10px 15px;
+  border: none;
+  background-color: #e0e0e0;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  transition: background-color 0.2s;
+  border-radius: 4px 4px 0 0;
+  margin-right: 2px;
+}
+
+.auth-tab-button.active {
+  background-color: var(--simcity-green);
+  color: var(--text-light);
+  border-bottom: 2px solid var(--simcity-green);
+}
+
+.login-actions.full-width {
+  display: block;
+  width: 100%;
+}
+
+.login-actions.full-width button {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.code-sent-message {
+  font-style: italic;
+  color: var(--simcity-dark-green);
+  margin-bottom: 15px;
+}
+
+.resend-button {
+  background-color: #6c757d !important; 
+}
+.resend-button:hover {
+  background-color: #5a6268 !important;
+}
