@@ -90,7 +90,7 @@ body {
   /* REDUCED HEADER PADDING */
   padding: 8px 10px;
   margin: 0;
-  font-size: 1em;
+  font-size: 1.2em;
 }
 
 .utility-content {
@@ -149,7 +149,7 @@ body {
     align-items: center;
     padding: 1px 0; /* Minimal vertical padding */
     border-bottom: 1px dotted #eee;
-    font-size: 0.9em;
+    font-size: 1em;
 }
 
 /* Utility Item specific 2-column row (Item | Have) */
@@ -161,7 +161,7 @@ body {
     align-items: center;
     padding: 1px 0;
     border-bottom: 1px dotted #eee;
-    font-size: 0.9em;
+    font-size: 1em;
 }
 
 
@@ -177,7 +177,7 @@ body {
     align-items: center;
     padding: 2px 5px; 
     border-bottom: 1px solid #ccc;
-    font-size: 0.8em;
+    font-size: .9em;
 }
 
 .tracker-header-bar.upgrade-header-bar {
@@ -226,7 +226,7 @@ body {
     /* REMOVED PADDING FOR COMPACTNESS */
     padding-left: 0;
     box-sizing: border-box;
-    font-size: 0.9em;
+    font-size: .95em;
 }
 
 .item-name-input {
@@ -243,7 +243,7 @@ body {
     border-radius: 4px;
     justify-self: center;
     box-sizing: border-box;
-    font-size: 0.8em;
+    font-size: 0.95em;
     text-align: center; 
 }
 
@@ -252,7 +252,7 @@ body {
     width: 100%; 
     padding: 0; /* NO PADDING */
     height: 18px; /* FIXED HEIGHT FOR COMPACTNESS */
-    font-size: 0.8em; 
+    font-size: .95em; 
     text-align: center;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -289,7 +289,7 @@ body {
 /* --- Button Styling --- */
 .complete-button {
     padding: 3px 6px; 
-    font-size: 0.8em;
+    font-size: .8m;
     border: none;
     border-radius: 4px;
     cursor: pointer;
@@ -473,18 +473,19 @@ body {
 /* --- Export HQ/Building Upgrade Layered Bar Fixes --- */
 
 /* Dropdown Size Fixes */
-.region-selector-layer label { font-weight: bold; margin-right: 5px; font-size: 0.9em; }
-.region-selector-layer select { padding: 1px; border: 1px solid #ccc; border-radius: 4px; font-weight: normal; font-size: 0.9em; max-width: 150px; }
+.region-selector-layer label { font-weight: bold; margin-right: 5px; font-size: 0.7em; }
+.region-selector-layer select { padding: 1px; border: 1px solid #ccc; border-radius: 4px; font-weight: normal; font-size: 0.7em; max-width: 150px; }
 
 
 /* Style the display for current points (Epic Project) */
 .current-points-display {
   padding: 10px 0; 
-  font-size: 1.1em;
+  font-size: .8em;
   font-weight: bold;
   border-bottom: 1px solid #ddd;
   background-color: #fffaf0; 
   margin: 0 -5px; 
+  justify-self: center;
 }
 
 /* Style for the layered region selector (Export HQ and Upgrades) */
@@ -514,7 +515,7 @@ body {
   border-radius: 0 0 8px 8px; 
 }
 
-/* src/App.css (Add to the end) */
+
 
 /* --- Auth Tab Bar Styles --- */
 .auth-tab-bar {
@@ -564,4 +565,101 @@ body {
 }
 .resend-button:hover {
   background-color: #5a6268 !important;
+}
+
+/* --- Building Upgrade Specific Styles --- */
+
+/* Style for the container holding the type/region dropdowns */
+.region-selector-layer {
+  display: flex;
+  justify-content: space-around;
+  padding: 5px 0;
+  font-size: 0.8em; /* Keep dropdown text small but readable */
+  background-color: #f9f9f9;
+  border-bottom: 1px solid #ccc;
+  color: #333;
+}
+
+.region-selector-layer select {
+  margin-left: 5px;
+  padding: 2px;
+  font-size: 0.9em;
+}
+
+/* 1. Fix the column layout and increase font size for the tracker rows */
+.building-upgrade-tab .tracker-row {
+  /* Item Input | Own | Need | Left */
+  grid-template-columns: 1fr 40px 40px 40px; 
+  gap: 3px;
+  padding: 3px 0;
+  font-size: 1em; /* Ensures rows are readable */
+}
+
+/* 2. Fix the column layout for the header bar */
+.building-upgrade-tab .upgrade-header-bar {
+  /* Item | Own | Need | Left (Matching the rows) */
+  grid-template-columns: 1fr 40px 40px 40px;
+  gap: 3px;
+  padding: 5px 5px;
+  font-size: 0.85em; /* Ensures header is readable */
+}
+
+/* 3. Style for the Item Name Input */
+.building-upgrade-tab .item-name-input {
+  width: 100%;
+  padding: 3px 5px;
+  height: 25px;
+  font-size: 0.95em;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.complete-all-button {
+  background-color: #6aa84f;
+  color: white;
+  border: none;
+  padding: 8px;
+  margin-top: 10px;
+  /* --- CORRECTED BORDER RADIUS --- */
+  border-bottom-left-radius: 8px; 
+  border-bottom-right-radius: 8px; 
+  cursor: pointer;
+  font-size: 1em;
+  width: 100%;
+  transition: background-color 0.3s;
+}
+
+.complete-all-button:hover {
+  background-color: #4a6e34;
+}
+
+/* Remove bottom padding from the utility-content container inside this tab */
+.building-upgrade-tab .utility-content {
+  padding-bottom: 0;
+}
+
+.building-upgradetracker h3 { 
+  background-color: #3c78d8; /* Dark Blue for a cleaner, distinct look */
+  /* ADDED: Top rounded corners */
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+/* --- EPIC PROJECT SPECIFIC STYLES --- */
+/* Fix the column layout for rows inside the Epic Project Tracker */
+.building-epicprojecttracker .tracker-row {
+  /* Item | Own/Need | Pts (Adjusted columns for this specific tracker) */
+  grid-template-columns: 1fr 50px 50px; 
+  gap: 5px;
+  padding: 3px 0;
+  font-size: 1em;
+}
+
+/* Fix the column layout for the Epic Project Tracker Header Bar */
+.building-epicprojecttracker .tracker-header-bar {
+  /* Item | Own/Need | Pts (Matching the row columns) */
+  grid-template-columns: 1fr 50px 50px;
+  gap: 5px;
+  padding: 5px 10px;
+  font-size: 0.85em;
 }

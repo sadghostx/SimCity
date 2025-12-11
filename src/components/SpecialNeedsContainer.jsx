@@ -1,4 +1,4 @@
-// src/components/SpecialNeedsContainer.jsx
+// src/components/SpecialNeedsContainer.jsx (FINAL STABLE CODE)
 
 import React from 'react';
 
@@ -15,10 +15,14 @@ import AirportTokyoTracker from './AirportTokyoTracker.jsx';
 // --- Export HQ Container (Manages dynamic tiles) ---
 import ExportTracker from './ExportTracker.jsx'; 
 
-// NOTE: You will need to import BuildingUpgradeTracker here when you create it.
-
-
-export default function SpecialNeedsContainer({ onNeedsUpdate, utilityItems }) {
+// NOTE: We use trackerData and updateTrackerState from the parent TabbedPlanner
+export default function SpecialNeedsContainer({ trackerData, updateTrackerState }) {
+    
+    // CRITICAL: Ensure the name expected by the child trackers is defined.
+    const onNeedsUpdate = updateTrackerState; 
+    
+    // utilityItems is defined here but not used, kept for future reference if a child needs it
+    // const utilityItems = trackerData.utilityItems; 
     
     return (
         <div className="special-needs-container">
@@ -28,47 +32,43 @@ export default function SpecialNeedsContainer({ onNeedsUpdate, utilityItems }) {
                 
                 {/* 1. Cargo Ship Tracker (Green Header) */}
                 <CargoShipTracker 
-                    onNeedsUpdate={onNeedsUpdate}
-                    utilityItems={utilityItems}
+                    trackerData={trackerData} 
+                    onNeedsUpdate={onNeedsUpdate} // CRASH FIX: Pass the function with the expected name
                 />
 
                 {/* 2. War Deliveries Tracker (Red Header) */}
                 <WarTracker 
-                    onNeedsUpdate={onNeedsUpdate}
-                    utilityItems={utilityItems}
+                    trackerData={trackerData}
+                    onNeedsUpdate={onNeedsUpdate} // CRASH FIX
                 />
 
                 {/* 3. Epic Project Tracker (Yellow Header) */}
                 <EpicProjectTracker 
-                    onNeedsUpdate={onNeedsUpdate} 
-                    utilityItems={utilityItems}
+                    trackerData={trackerData}
+                    onNeedsUpdate={onNeedsUpdate} // CRASH FIX
                 />
                 
                 {/* 4. Export HQ Tracker (Purple Header - Dynamic Container) */}
                 <ExportTracker 
-                    onNeedsUpdate={onNeedsUpdate} 
-                    utilityItems={utilityItems} 
+                    trackerData={trackerData}
+                    onNeedsUpdate={onNeedsUpdate} // CRASH FIX
                 />
                 
                 {/* 5, 6, 7. AIRPORT TRACKERS (Blue Headers - 3 Separate Tiles) */}
                 <AirportLondonTracker 
-                    onNeedsUpdate={onNeedsUpdate}
-                    utilityItems={utilityItems}
+                    trackerData={trackerData}
+                    onNeedsUpdate={onNeedsUpdate} // CRASH FIX
                 />
                 <AirportParisTracker 
-                    onNeedsUpdate={onNeedsUpdate}
-                    utilityItems={utilityItems}
+                    trackerData={trackerData}
+                    onNeedsUpdate={onNeedsUpdate} // CRASH FIX
                 />
                 <AirportTokyoTracker 
-                    onNeedsUpdate={onNeedsUpdate}
-                    utilityItems={utilityItems}
+                    trackerData={trackerData}
+                    onNeedsUpdate={onNeedsUpdate} // CRASH FIX
                 />
                 
-                {/* Placeholder for Building Upgrade Tracker, uncomment when ready */}
-                {/* <BuildingUpgradeTracker 
-                    onNeedsUpdate={onNeedsUpdate} 
-                    utilityItems={utilityItems} 
-                /> */}
+                {/* The Building Upgrade Tracker is on its own dedicated tab. */}
             </div>
         </div>
     );

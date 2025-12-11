@@ -77,15 +77,40 @@ ALL_BUILDINGS.sort((a, b) => {
 });
 
 
-export default function InventoryPage({ utilityItems, updateUtilityItem, totalNeeds }) {
+// -----------------------------------------------------------------------------------
+// !! UPDATED FUNCTION SIGNATURE TO RECEIVE PROPS FROM TabbedProductionPlanner.jsx !!
+// -----------------------------------------------------------------------------------
+export default function InventoryPage({ trackerData, updateTrackerState }) {
     
+    // Destructure required data from the trackerData prop
+    const { utilityItems, totalNeeds } = trackerData; // Assuming totalNeeds is now part of trackerData
+    
+    // Centralized update function for inventory items
+    const updateUtilityItem = useCallback((itemKey, newValue) => {
+        // Create a copy of utilityItems with the updated item 'have' count
+        const updatedUtilityItems = {
+            ...utilityItems,
+            [itemKey]: {
+                ...utilityItems[itemKey],
+                have: newValue,
+            }
+        };
+        // Use the App.jsx wrapper to update the top-level state and save to Firestore
+        updateTrackerState('utilityItems', updatedUtilityItems);
+    }, [utilityItems, updateTrackerState]);
+
+
     // 1. Pre-calculate total needs from all trackers (essential for the 'Needed' column)
     const aggregatedNeedsMap = useMemo(() => {
         const needsMap = {};
+        // totalNeeds structure in App.jsx is { cargoOrders: [..], warTracker: [..], ... }
         Object.values(totalNeeds || {}).forEach(trackerNeeds => {
-            for (const item in trackerNeeds) {
-                const lowerItem = item.toLowerCase();
-                needsMap[lowerItem] = (needsMap[lowerItem] || 0) + trackerNeeds[item];
+            // Check if trackerNeeds is an object (like {nail: 3})
+            if (typeof trackerNeeds === 'object' && !Array.isArray(trackerNeeds)) {
+                 for (const item in trackerNeeds) {
+                    const lowerItem = item.toLowerCase();
+                    needsMap[lowerItem] = (needsMap[lowerItem] || 0) + trackerNeeds[item];
+                }
             }
         });
         return needsMap;
@@ -123,6 +148,7 @@ export default function InventoryPage({ utilityItems, updateUtilityItem, totalNe
 
     // Handler for updating the 'Have' (In Stock) count
     const handleHaveChange = useCallback((item, value) => {
+        // Use the local updateUtilityItem function
         updateUtilityItem(item, Number(value));
     }, [updateUtilityItem]);
 

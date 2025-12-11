@@ -1,4 +1,4 @@
-// src/components/BuildingUpgradeTracker.jsx (FINAL CORRECTED CODE)
+// src/components/BuildingUpgradeTracker.jsx 
 
 import React, { useState, useEffect, useCallback } from 'react';
 

@@ -54,16 +54,31 @@ const UTILITY_ITEM_GROUPS = {
 const ALL_GROUPS = Object.keys(UTILITY_ITEM_GROUPS);
 
 
-export default function UtilityItemsTab({ utilityItems, updateUtilityItem }) {
+export default function UtilityItemsTab({ trackerData, updateTrackerState }) {
     
+    // Extract utilityItems and the general update function from trackerData/updateTrackerState
+    const utilityItems = trackerData.utilityItems;
+
+    // We will use the main updateTrackerState wrapper to save changes to Firestore
+    const updateUtilityItem = useCallback((itemKey, newValue) => {
+        // Create a copy of utilityItems with the updated item
+        const updatedUtilityItems = {
+            ...utilityItems,
+            [itemKey]: {
+                ...utilityItems[itemKey],
+                have: newValue,
+            }
+        };
+        // Use the App.jsx wrapper to update the top-level state and save to Firestore
+        updateTrackerState('utilityItems', updatedUtilityItems);
+    }, [utilityItems, updateTrackerState]);
+
+
     // Handler for updating the 'Have' (In Stock) count
     const handleHaveChange = useCallback((item, value) => {
         // Only updates the 'have' count
         updateUtilityItem(item, Number(value));
     }, [updateUtilityItem]);
-
-    // Goal/Target tracking logic is not needed for this compact view.
-
 
     // Helper to render the item rows for a single utility group tile
     const renderUtilityRows = (items) => (

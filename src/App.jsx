@@ -6,6 +6,7 @@ import Login from './pages/Login.jsx';
 import { auth, db } from './firebase.jsx'; // Import Firebase services
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { doc, getDoc, setDoc } from 'firebase/firestore'; 
+import { useMemo } from 'react'; // Added useMemo for calculating totalNeeds
 import './App.css'; 
 
 
@@ -129,24 +130,39 @@ export default function App() {
     }, [userRef]);
 
 
-    // 2. FIRESTORE DATA LOADING
+    // 2. FIRESTORE DATA LOADING (CRITICAL FIX APPLIED HERE)
     const loadTrackerData = useCallback(async (uid) => {
         const docRef = doc(db, 'users', uid);
         try {
             const docSnap = await getDoc(docRef);
             if (docSnap.exists()) {
-                // Merge saved data with initial structure to ensure new fields are included
                 const savedData = docSnap.data();
-                setTrackerData({ ...initialTrackerData, ...savedData });
+                
+                // CRITICAL FIX: Merge saved data but preserve initial structure, 
+                // explicitly preventing null saved values from overwriting entire objects.
+                setTrackerData({ 
+                    ...initialTrackerData, 
+                    ...savedData,
+                    
+                    // Use saved data OR fall back to the safe initial structure
+                    inventoryItems: savedData.inventoryItems || initialTrackerData.inventoryItems,
+                    utilityItems: savedData.utilityItems || initialTrackerData.utilityItems,
+                    
+                    // Optional: Add other top-level objects if they are arrays/objects prone to null
+                    cargoOrders: savedData.cargoOrders || initialTrackerData.cargoOrders,
+                    warTracker: savedData.warTracker || initialTrackerData.warTracker,
+                    buildingUpgrades: savedData.buildingUpgrades || initialTrackerData.buildingUpgrades,
+                });
+                
             } else {
                 console.log("No saved data found, initializing state.");
-                // Save the complete initial state to the new user's document
                 await setDoc(docRef, initialTrackerData);
                 setTrackerData(initialTrackerData);
             }
         } catch (error) {
             console.error("Error loading data:", error);
-            setTrackerData(initialTrackerData);
+            // If load fails, set to initial state to prevent crash
+            setTrackerData(initialTrackerData); 
         }
     }, []);
 
@@ -177,7 +193,22 @@ export default function App() {
         // Save to Firestore
         saveTrackerData(updatedData);
     }, [trackerData, saveTrackerData]);
-
+    
+    
+    // 5. MEMOIZED CALCULATION FOR TOTAL NEEDS (Prevent crashes if input is null)
+    const totalNeeds = useMemo(() => {
+        // This calculates the needs from all sub-trackers (cargo, war, etc.)
+        // Since trackerData contains arrays like cargoOrders and buildingUpgrades,
+        // this object must be defined to prevent crashes in child components.
+        
+        // Placeholder implementation (You need to implement the actual logic in your project):
+        return {
+            cargoOrders: trackerData.cargoOrders || [], // Array check
+            buildingUpgrades: trackerData.buildingUpgrades || [], // Array check
+            // Add any other components that generate needs (e.g., WarTracker, EpicProject)
+        };
+    }, [trackerData]);
+    
 
     // Logout function
     const handleLogout = () => {
@@ -194,7 +225,7 @@ export default function App() {
         return <Login setUser={setUser} />;
     }
 
-    // 5. CRITICAL DATA CHECK (Prevents TypeError crash if data is unexpectedly null during render)
+    // 6. FINAL CRITICAL DATA CHECK
     if (!trackerData || !trackerData.inventoryItems || !trackerData.utilityItems) {
         return <div className="loading-screen">Loading user data...</div>;
     }
@@ -214,6 +245,9 @@ export default function App() {
             <TabbedProductionPlanner 
                 trackerData={trackerData} 
                 updateTrackerState={updateTrackerState}
+                totalNeeds={totalNeeds} // Pass the calculated needs
+                utilityItems={trackerData.utilityItems}
+                onUtilityUpdate={updateTrackerState} // Use the main updater
             />
         </div>
     );
